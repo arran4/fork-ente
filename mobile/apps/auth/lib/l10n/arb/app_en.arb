@@ -17,8 +17,11 @@
   "@allTabEmptyHint": {
     "description": "Shown when the All tab has no active codes but Trash contains codes"
   },
+  "alwaysShowBarcode": "Always show barcode",
   "importScanQrCode": "Scan a QR Code",
   "qrCode": "QR code",
+  "setupQrCode": "Setup QR Code",
+  "barcode": "Barcode",
   "qr": "QR",
   "importEnterSetupKey": "Enter a setup key",
   "importAccountPageTitle": "Enter account details",
