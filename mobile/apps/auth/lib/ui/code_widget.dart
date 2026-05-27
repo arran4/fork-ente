@@ -382,7 +382,7 @@ class _CodeWidgetState extends State<CodeWidget> {
         return Container(
           padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 4),
           child: BarcodeWidget(
-            barcode: Barcode.code39(),
+            barcode: Barcode.code128(),
             data: value,
             width: double.infinity,
             height: 40,

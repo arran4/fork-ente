@@ -110,11 +110,7 @@ class PreferenceService {
   }
 
   bool shouldAlwaysShowBarcode() {
-    if (_prefs.containsKey(kShouldAlwaysShowBarcode)) {
-      return _prefs.getBool(kShouldAlwaysShowBarcode)!;
-    } else {
-      return false;
-    }
+    return _prefs.getBool(kShouldAlwaysShowBarcode) ?? false;
   }
 
   Future<void> setShouldAlwaysShowBarcode(bool value) async {

@@ -3,7 +3,7 @@ import 'package:ente_auth/theme/colors.dart';
 import 'package:ente_auth/theme/ente_theme.dart';
 import 'package:flutter/material.dart';
 
-class AuthBarcodeDialog extends StatefulWidget {
+class AuthBarcodeDialog extends StatelessWidget {
   final String data;
   final String title;
   final String? subtitle;
@@ -18,13 +18,7 @@ class AuthBarcodeDialog extends StatefulWidget {
   });
 
   @override
-  State<AuthBarcodeDialog> createState() => _AuthBarcodeDialogState();
-}
-
-class _AuthBarcodeDialogState extends State<AuthBarcodeDialog> {
-  @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
     final enteTextTheme = getEnteTextTheme(context);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
@@ -71,7 +65,7 @@ class _AuthBarcodeDialogState extends State<AuthBarcodeDialog> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(widget.dialogTitle, style: dialogTitleStyle),
+                      Text(dialogTitle, style: dialogTitleStyle),
                       GestureDetector(
                         onTap: () => Navigator.of(context).pop(),
                         child: Container(
@@ -103,7 +97,7 @@ class _AuthBarcodeDialogState extends State<AuthBarcodeDialog> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          widget.title,
+                          title,
                           style: enteTextTheme.largeBold.copyWith(
                             color: Colors.black,
                             fontSize: 20,
@@ -112,11 +106,11 @@ class _AuthBarcodeDialogState extends State<AuthBarcodeDialog> {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        if (widget.subtitle != null &&
-                            widget.subtitle!.isNotEmpty) ...[
+                        if (subtitle != null &&
+                            subtitle!.isNotEmpty) ...[
                           const SizedBox(height: 4),
                           Text(
-                            widget.subtitle!,
+                            subtitle!,
                             style: enteTextTheme.small.copyWith(
                               color: Colors.black.withValues(
                                 alpha: 0.7,
@@ -130,8 +124,8 @@ class _AuthBarcodeDialogState extends State<AuthBarcodeDialog> {
                         ],
                         const SizedBox(height: 24),
                         BarcodeWidget(
-                          barcode: Barcode.code39(),
-                          data: widget.data,
+                          barcode: Barcode.code128(),
+                          data: data,
                           width: double.infinity,
                           height: 100,
                           errorBuilder: (context, error) => Center(
