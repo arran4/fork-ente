@@ -88,6 +88,19 @@ class _AdvancedSectionWidgetState extends State<AdvancedSectionWidget> {
         ),
         sectionOptionSpacing,
         MenuItemWidget(
+          captionedTextWidget: CaptionedTextWidget(title: l10n.alwaysShowBarcode),
+          trailingWidget: ToggleSwitchWidget(
+            value: () => PreferenceService.instance.shouldAlwaysShowBarcode(),
+            onChanged: () async {
+              await PreferenceService.instance.setShouldAlwaysShowBarcode(
+                !PreferenceService.instance.shouldAlwaysShowBarcode(),
+              );
+              setState(() {});
+            },
+          ),
+        ),
+        sectionOptionSpacing,
+        MenuItemWidget(
           captionedTextWidget: CaptionedTextWidget(title: l10n.compactMode),
           trailingWidget: ToggleSwitchWidget(
             value: () => PreferenceService.instance.isCompactMode(),
