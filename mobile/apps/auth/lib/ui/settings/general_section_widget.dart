@@ -82,6 +82,7 @@ class _AdvancedSectionWidgetState extends State<AdvancedSectionWidget> {
               await PreferenceService.instance.setShowLargeIcons(
                 !PreferenceService.instance.shouldShowLargeIcons(),
               );
+              if (!mounted) return;
               setState(() {});
             },
           ),
@@ -95,6 +96,7 @@ class _AdvancedSectionWidgetState extends State<AdvancedSectionWidget> {
               await PreferenceService.instance.setShouldAlwaysShowBarcode(
                 !PreferenceService.instance.shouldAlwaysShowBarcode(),
               );
+              if (!mounted) return;
               setState(() {});
             },
           ),
@@ -109,6 +111,7 @@ class _AdvancedSectionWidgetState extends State<AdvancedSectionWidget> {
                 !PreferenceService.instance.isCompactMode(),
               );
               Bus.instance.fire(IconsChangedEvent());
+              if (!mounted) return;
               setState(() {});
             },
           ),
@@ -125,6 +128,7 @@ class _AdvancedSectionWidgetState extends State<AdvancedSectionWidget> {
               if (PreferenceService.instance.shouldHideCodes()) {
                 showToast(context, context.l10n.doubleTapToViewHiddenCode);
               }
+              if (!mounted) return;
               setState(() {});
             },
           ),
@@ -141,6 +145,7 @@ class _AdvancedSectionWidgetState extends State<AdvancedSectionWidget> {
               await PreferenceService.instance.setAutoFocusOnSearchBar(
                 !PreferenceService.instance.shouldAutoFocusOnSearchBar(),
               );
+              if (!mounted) return;
               setState(() {});
             },
           ),
@@ -157,7 +162,8 @@ class _AdvancedSectionWidgetState extends State<AdvancedSectionWidget> {
                 await PreferenceService.instance.setShouldMinimizeOnCopy(
                   !PreferenceService.instance.shouldMinimizeOnCopy(),
                 );
-                setState(() {});
+                if (!mounted) return;
+              setState(() {});
               },
             ),
           ),
@@ -175,7 +181,8 @@ class _AdvancedSectionWidgetState extends State<AdvancedSectionWidget> {
                 await PreferenceService.instance.setShouldMinimizeToTrayOnClose(
                   !PreferenceService.instance.shouldMinimizeToTrayOnClose(),
                 );
-                setState(() {});
+                if (!mounted) return;
+              setState(() {});
               },
             ),
           ),
@@ -191,6 +198,7 @@ class _AdvancedSectionWidgetState extends State<AdvancedSectionWidget> {
               await SuperLogging.setShouldReportErrors(
                 !SuperLogging.shouldReportErrors(),
               );
+              if (!mounted) return;
               setState(() {});
             },
           ),

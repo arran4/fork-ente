@@ -1,0 +1,34 @@
+<<<<<<< SEARCH
+        return Container(
+          padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 4),
+          child: BarcodeWidget(
+            barcode: Barcode.code128(),
+            data: value,
+            width: double.infinity,
+            height: 40,
+            drawText: false,
+            errorBuilder: (context, error) => Center(
+              child: Text(error),
+            ),
+          ),
+        );
+=======
+        return Container(
+          margin: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 4),
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: BarcodeWidget(
+            barcode: Barcode.code128(),
+            data: value,
+            width: double.infinity,
+            height: 40,
+            drawText: false,
+            errorBuilder: (context, error) => Center(
+              child: Text(error),
+            ),
+          ),
+        );
+>>>>>>> REPLACE

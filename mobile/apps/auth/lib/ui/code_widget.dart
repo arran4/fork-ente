@@ -200,7 +200,7 @@ class _CodeWidgetState extends State<CodeWidget> {
                             ? const SizedBox.shrink()
                             : const SizedBox(height: 4),
                         _getBottomRow(l10n),
-                        if (PreferenceService.instance.shouldAlwaysShowBarcode())
+                        if (PreferenceService.instance.shouldAlwaysShowBarcode() && !_hideCode)
                           _getBarcodeRow(),
                       ],
                     ),
@@ -392,7 +392,12 @@ class _CodeWidgetState extends State<CodeWidget> {
           return const SizedBox.shrink();
         }
         return Container(
-          padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 4),
+          margin: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 4),
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+          ),
           child: BarcodeWidget(
             barcode: Barcode.code128(),
             data: value,
