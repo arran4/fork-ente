@@ -376,7 +376,7 @@ class _CodeWidgetState extends State<CodeWidget> {
     return ValueListenableBuilder<String>(
       valueListenable: _currentCode,
       builder: (context, value, child) {
-        if (value.isEmpty) {
+        if (value.isEmpty || _hideCode) {
           return const SizedBox.shrink();
         }
         return Container(
@@ -966,6 +966,11 @@ class _CodeWidgetState extends State<CodeWidget> {
       Navigator.of(context).pop();
     }
 
+    if (_hideCode) {
+      showToast(context, context.l10n.doubleTapToViewHiddenCode);
+      return;
+    }
+
     final codeValue = _currentCode.value;
     if (codeValue.isEmpty) {
       return;
@@ -987,6 +992,11 @@ class _CodeWidgetState extends State<CodeWidget> {
   Future<void> _onShowQrForCodeValuePressed([bool? pop]) async {
     if (mounted && pop == true) {
       Navigator.of(context).pop();
+    }
+
+    if (_hideCode) {
+      showToast(context, context.l10n.doubleTapToViewHiddenCode);
+      return;
     }
 
     final codeValue = _currentCode.value;
