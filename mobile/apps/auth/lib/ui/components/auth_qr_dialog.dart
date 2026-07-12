@@ -1,35 +1,23 @@
-import 'dart:io';
 import 'dart:math';
-import 'dart:typed_data';
-import 'dart:ui' as ui;
 
 import 'package:ente_auth/theme/colors.dart';
 import 'package:ente_auth/theme/ente_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:share_plus/share_plus.dart';
 
 class AuthQrDialog extends StatefulWidget {
   final String data;
   final String title;
   final String? subtitle;
-  final String shareFileName;
-  final String shareText;
   final String dialogTitle;
-  final String shareButtonText;
 
   const AuthQrDialog({
     super.key,
     required this.data,
     required this.title,
-    required this.shareFileName,
-    required this.shareText,
     this.subtitle,
     this.dialogTitle = 'QR Code',
-    this.shareButtonText = 'Share',
   });
 
   @override
@@ -38,40 +26,6 @@ class AuthQrDialog extends StatefulWidget {
 
 class _AuthQrDialogState extends State<AuthQrDialog> {
   final GlobalKey _qrKey = GlobalKey();
-
-  Future<void> _shareQrCode() async {
-    try {
-      final boundary =
-          _qrKey.currentContext?.findRenderObject() as RenderRepaintBoundary?;
-      if (boundary == null) return;
-
-      final ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-      final ByteData? byteData = await image.toByteData(
-        format: ui.ImageByteFormat.png,
-      );
-      if (byteData == null) return;
-
-      final Uint8List pngBytes = byteData.buffer.asUint8List();
-      final directory = await getTemporaryDirectory();
-      final file = File('${directory.path}/${widget.shareFileName}');
-      await file.writeAsBytes(pngBytes);
-
-      final box = context.findRenderObject() as RenderBox?;
-      final shareOrigin = box != null
-          ? box.localToGlobal(Offset.zero) & box.size
-          : null;
-
-      await SharePlus.instance.share(
-        ShareParams(
-          files: [XFile(file.path)],
-          text: widget.shareText,
-          sharePositionOrigin: shareOrigin,
-        ),
-      );
-    } catch (error) {
-      debugPrint('Error sharing QR code: $error');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,11 +50,6 @@ class _AuthQrDialogState extends State<AuthQrDialog> {
       fontSize: 20,
       fontWeight: FontWeight.w700,
       color: theme.colorScheme.onSurface,
-    );
-    final shareButtonStyle = theme.textTheme.labelLarge?.copyWith(
-      fontSize: 16,
-      fontWeight: FontWeight.w600,
-      color: Colors.white,
     );
 
     return Dialog(
@@ -255,23 +204,6 @@ class _AuthQrDialogState extends State<AuthQrDialog> {
                           ),
                         ],
                       ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                GestureDetector(
-                  onTap: _shareQrCode,
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    decoration: BoxDecoration(
-                      color: accentColor,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      widget.shareButtonText,
-                      textAlign: TextAlign.center,
-                      style: shareButtonStyle,
                     ),
                   ),
                 ),

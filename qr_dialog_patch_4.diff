@@ -1,0 +1,21 @@
+diff --git a/mobile/apps/auth/lib/ui/components/auth_qr_dialog.dart b/mobile/apps/auth/lib/ui/components/auth_qr_dialog.dart
+--- a/mobile/apps/auth/lib/ui/components/auth_qr_dialog.dart
++++ b/mobile/apps/auth/lib/ui/components/auth_qr_dialog.dart
+@@ -10,8 +10,6 @@
+   final String data;
+   final String title;
+   final String? subtitle;
+-  final String shareFileName;
+-  final String shareText;
+   final String dialogTitle;
+   final String shareButtonText;
+
+@@ -20,8 +18,6 @@
+     required this.data,
+     required this.title,
+     this.subtitle,
+-    required this.shareFileName,
+-    required this.shareText,
+     this.dialogTitle = 'QR Code',
+     this.shareButtonText = 'Share',
+   });

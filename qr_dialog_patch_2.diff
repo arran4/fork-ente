@@ -1,0 +1,56 @@
+diff --git a/mobile/apps/auth/lib/ui/components/auth_qr_dialog.dart b/mobile/apps/auth/lib/ui/components/auth_qr_dialog.dart
+--- a/mobile/apps/auth/lib/ui/components/auth_qr_dialog.dart
++++ b/mobile/apps/auth/lib/ui/components/auth_qr_dialog.dart
+@@ -39,32 +39,6 @@
+   bool _showSetupQr = false;
+   final GlobalKey _qrKey = GlobalKey();
+
+-  Future<void> _shareQrCode() async {
+-    try {
+-      final boundary =
+-          _qrKey.currentContext?.findRenderObject() as RenderRepaintBoundary?;
+-      if (boundary == null) return;
+-
+-      final ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+-      final ByteData? byteData = await image.toByteData(
+-        format: ui.ImageByteFormat.png,
+-      );
+-      if (byteData == null) return;
+-
+-      final Uint8List pngBytes = byteData.buffer.asUint8List();
+-      final directory = await getTemporaryDirectory();
+-      final file = File('${directory.path}/${widget.shareFileName}');
+-      await file.writeAsBytes(pngBytes);
+-
+-      final box = context.findRenderObject() as RenderBox?;
+-      final shareOrigin = box != null
+-          ? box.localToGlobal(Offset.zero) & box.size
+-          : null;
+-
+-      await SharePlus.instance.share(
+-        ShareParams(
+-          files: [file.path],
+-          text: widget.shareText,
+-        ),
+-        shareOrigin: shareOrigin,
+-      );
+-    } catch (e) {
+-      debugPrint('Error sharing QR code: $e');
+-    }
+-  }
+-
+   @override
+   void initState() {
+     super.initState();
+@@ -95,11 +69,6 @@
+     );
+
+     final qrSize = min(MediaQuery.sizeOf(context).width - 100, 300.0);
+-
+-    final shareButtonStyle = theme.textTheme.titleMedium?.copyWith(
+-      color: Colors.white,
+-      fontSize: 16,
+-      fontWeight: FontWeight.w600,
+-    );
+
+     return Dialog(

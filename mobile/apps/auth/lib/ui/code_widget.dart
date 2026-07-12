@@ -1011,10 +1011,7 @@ class _CodeWidgetState extends State<CodeWidget> {
           data: codeValue,
           title: widget.code.issuer,
           subtitle: widget.code.account,
-          shareFileName: 'ente_auth_qr_${widget.code.account}.png',
-          shareText: 'QR code for ${widget.code.account}',
           dialogTitle: context.l10n.qrCode,
-          shareButtonText: context.l10n.share,
         );
       },
     );
@@ -1042,10 +1039,7 @@ class _CodeWidgetState extends State<CodeWidget> {
           data: qrData,
           title: widget.code.issuer,
           subtitle: widget.code.account,
-          shareFileName: 'ente_auth_qr_${widget.code.account}.png',
-          shareText: 'QR code for ${widget.code.account}',
           dialogTitle: context.l10n.qrCode,
-          shareButtonText: context.l10n.share,
         );
       },
     );

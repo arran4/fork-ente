@@ -1,0 +1,27 @@
+diff --git a/mobile/apps/auth/lib/ui/components/auth_qr_dialog.dart b/mobile/apps/auth/lib/ui/components/auth_qr_dialog.dart
+--- a/mobile/apps/auth/lib/ui/components/auth_qr_dialog.dart
++++ b/mobile/apps/auth/lib/ui/components/auth_qr_dialog.dart
+@@ -258,23 +258,6 @@
+                     ),
+                   ),
+                 ),
+-                const SizedBox(height: 24),
+-                GestureDetector(
+-                  onTap: _shareQrCode,
+-                  child: Container(
+-                    width: double.infinity,
+-                    padding: const EdgeInsets.symmetric(vertical: 14),
+-                    decoration: BoxDecoration(
+-                      color: accentColor,
+-                      borderRadius: BorderRadius.circular(12),
+-                    ),
+-                    child: Text(
+-                      widget.shareButtonText,
+-                      textAlign: TextAlign.center,
+-                      style: shareButtonStyle,
+-                    ),
+-                  ),
+-                ),
+               ],
+             ),
+           ),

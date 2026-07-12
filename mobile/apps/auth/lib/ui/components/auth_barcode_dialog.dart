@@ -106,6 +106,17 @@ class AuthBarcodeDialog extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
+                        const SizedBox(height: 4),
+                        Text(
+                          data,
+                          style: enteTextTheme.small.copyWith(
+                            color: Colors.black.withValues(alpha: 0.7),
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          textAlign: TextAlign.center,
+                          maxLines: 1,
+                        ),
                         if (subtitle != null &&
                             subtitle!.isNotEmpty) ...[
                           const SizedBox(height: 4),
@@ -128,6 +139,7 @@ class AuthBarcodeDialog extends StatelessWidget {
                           data: data,
                           width: double.infinity,
                           height: 100,
+                          drawText: false,
                           errorBuilder: (context, error) => Center(
                             child: Text(error),
                           ),
