@@ -23,6 +23,7 @@ permissions:
 
 jobs:
     rust-workspace:
+        if: github.repository == 'ente-io/ente' || github.event_name != 'schedule'
         # For rust-lint.yml and rust-test.yml.
         runs-on: ubuntu-latest
         defaults:
@@ -67,6 +68,7 @@ jobs:
             - run: cargo install cargo-audit --version 0.22.2 --locked
 
     rust-flutter:
+        if: github.repository == 'ente-io/ente' || github.event_name != 'schedule'
         # For the cargo steps of mobile-lint.yml.
         runs-on: ubuntu-latest
         defaults:
@@ -96,6 +98,7 @@ jobs:
             - run: cargo clippy -p ente_rust --features flutter --all-targets --locked
 
     rust-wasm:
+        if: github.repository == 'ente-io/ente' || github.event_name != 'schedule'
         # For web-lint.yml's WASM builds.
         runs-on: ubuntu-latest
         defaults:
@@ -125,6 +128,7 @@ jobs:
             - run: npm run build:space-wasm
 
     ensu-android:
+        if: github.repository == 'ente-io/ente' || github.event_name != 'schedule'
         # For ensu-android-build.yml.
         runs-on: ubuntu-latest
         steps:
@@ -150,6 +154,7 @@ jobs:
               run: ./gradlew :app:assembleDebug
 
     ensu-ios:
+        if: github.repository == 'ente-io/ente' || github.event_name != 'schedule'
         # For ensu-ios-build.yml.
         runs-on: macos-26
         steps:
@@ -171,6 +176,7 @@ jobs:
               run: xcodebuild build-for-testing -scheme Ensu -destination 'platform=iOS Simulator,name=iPhone 17'
 
     go-server:
+        if: github.repository == 'ente-io/ente' || github.event_name != 'schedule'
         # For server-lint.yml.
         runs-on: ubuntu-latest
         defaults:

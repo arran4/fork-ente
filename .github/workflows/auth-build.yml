@@ -20,6 +20,7 @@ concurrency:
 
 jobs:
     build-metadata:
+        if: github.repository == 'ente-io/ente' || github.event_name != 'schedule'
         runs-on: ubuntu-latest
 
         outputs:
@@ -84,7 +85,7 @@ jobs:
 
     build-android:
         needs: build-metadata
-        if: needs.build-metadata.outputs.should_build == 'true'
+        if: (github.repository == 'ente-io/ente' || github.event_name != 'schedule') && (needs.build-metadata.outputs.should_build == 'true')
         runs-on: ubuntu-latest
         environment:
             name: production
@@ -211,7 +212,7 @@ jobs:
 
     build-linux:
         needs: build-metadata
-        if: needs.build-metadata.outputs.should_build == 'true'
+        if: (github.repository == 'ente-io/ente' || github.event_name != 'schedule') && (needs.build-metadata.outputs.should_build == 'true')
         runs-on: ubuntu-22.04
         environment:
             name: production
@@ -321,7 +322,7 @@ jobs:
 
     build-windows:
         needs: build-metadata
-        if: needs.build-metadata.outputs.should_build == 'true'
+        if: (github.repository == 'ente-io/ente' || github.event_name != 'schedule') && (needs.build-metadata.outputs.should_build == 'true')
         # VS2022 is required until local_auth_windows builds cleanly on VS2026.
         runs-on: windows-2022
         environment:
@@ -486,7 +487,7 @@ jobs:
 
     build-macos:
         needs: build-metadata
-        if: needs.build-metadata.outputs.should_build == 'true'
+        if: (github.repository == 'ente-io/ente' || github.event_name != 'schedule') && (needs.build-metadata.outputs.should_build == 'true')
         runs-on: macos-15
         environment:
             name: production
@@ -621,7 +622,7 @@ jobs:
 
     build-ios:
         needs: build-metadata
-        if: needs.build-metadata.outputs.should_build == 'true'
+        if: (github.repository == 'ente-io/ente' || github.event_name != 'schedule') && (needs.build-metadata.outputs.should_build == 'true')
         runs-on: macos-26
         environment:
             name: production
@@ -694,7 +695,7 @@ jobs:
 
     finish-build:
         needs: [build-metadata, build-android, build-linux, build-windows, build-macos, build-ios]
-        if: needs.build-metadata.outputs.should_build == 'true'
+        if: (github.repository == 'ente-io/ente' || github.event_name != 'schedule') && (needs.build-metadata.outputs.should_build == 'true')
         runs-on: ubuntu-latest
         environment:
             name: production

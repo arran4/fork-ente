@@ -20,6 +20,7 @@ concurrency:
 
 jobs:
     build-metadata:
+        if: github.repository == 'ente-io/ente' || github.event_name != 'schedule'
         runs-on: ubuntu-latest
 
         outputs:
@@ -84,7 +85,7 @@ jobs:
 
     build-android:
         needs: build-metadata
-        if: needs.build-metadata.outputs.should_build == 'true'
+        if: (github.repository == 'ente-io/ente' || github.event_name != 'schedule') && (needs.build-metadata.outputs.should_build == 'true')
         runs-on: ubuntu-latest
         environment:
             name: production
@@ -212,7 +213,7 @@ jobs:
 
     build-ios:
         needs: build-metadata
-        if: needs.build-metadata.outputs.should_build == 'true'
+        if: (github.repository == 'ente-io/ente' || github.event_name != 'schedule') && (needs.build-metadata.outputs.should_build == 'true')
         runs-on: macos-26
         environment:
             name: production
@@ -293,7 +294,7 @@ jobs:
 
     finish-build:
         needs: [build-metadata, build-android, build-ios]
-        if: needs.build-metadata.outputs.should_build == 'true'
+        if: (github.repository == 'ente-io/ente' || github.event_name != 'schedule') && (needs.build-metadata.outputs.should_build == 'true')
         runs-on: ubuntu-latest
         environment:
             name: production

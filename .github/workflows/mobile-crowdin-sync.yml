@@ -25,6 +25,7 @@ permissions:
 
 jobs:
     synchronize-with-crowdin:
+        if: github.repository == 'ente-io/ente' || github.event_name != 'schedule'
         name: "Sync ${{ matrix.app }} with Crowdin"
         runs-on: ubuntu-latest
         strategy:

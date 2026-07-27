@@ -17,6 +17,7 @@ on:
 
 jobs:
     analyze:
+        if: github.repository == 'ente-io/ente' || github.event_name != 'schedule'
         name: Analyze (${{ matrix.language }})
         runs-on: 'ubuntu-latest'
         permissions:

@@ -20,6 +20,7 @@ concurrency:
 
 jobs:
     build-metadata:
+        if: github.repository == 'ente-io/ente' || github.event_name != 'schedule'
         runs-on: ubuntu-latest
 
         outputs:
@@ -75,7 +76,7 @@ jobs:
 
     build:
         needs: build-metadata
-        if: needs.build-metadata.outputs.should_build == 'true'
+        if: (github.repository == 'ente-io/ente' || github.event_name != 'schedule') && (needs.build-metadata.outputs.should_build == 'true')
         runs-on: ${{ matrix.os }}
         environment:
             name: production
@@ -197,7 +198,7 @@ jobs:
 
     finish-build:
         needs: [build-metadata, build]
-        if: needs.build-metadata.outputs.should_build == 'true'
+        if: (github.repository == 'ente-io/ente' || github.event_name != 'schedule') && (needs.build-metadata.outputs.should_build == 'true')
         runs-on: ubuntu-latest
         permissions:
             contents: write

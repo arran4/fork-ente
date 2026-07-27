@@ -32,6 +32,7 @@ permissions:
 
 jobs:
     synchronize-with-crowdin:
+        if: github.repository == 'ente-io/ente' || github.event_name != 'schedule'
         runs-on: ubuntu-latest
 
         steps:
