@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:barcode_widget/barcode_widget.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:ente_auth/core/configuration.dart';
 import 'package:ente_auth/ente_theme_data.dart';
@@ -16,6 +17,7 @@ import 'package:ente_auth/store/code_store.dart';
 import 'package:ente_auth/theme/ente_theme.dart';
 import 'package:ente_auth/ui/code_timer_progress.dart';
 import 'package:ente_auth/ui/code_widget_layout_utils.dart';
+import 'package:ente_auth/ui/components/auth_barcode_dialog.dart';
 import 'package:ente_auth/ui/components/auth_qr_dialog.dart';
 import 'package:ente_auth/ui/components/note_dialog.dart';
 import 'package:ente_auth/ui/home/shortcuts.dart';
@@ -191,6 +193,8 @@ class _CodeWidgetState extends State<CodeWidget> {
                             ? const SizedBox.shrink()
                             : const SizedBox(height: 4),
                         _getBottomRow(l10n),
+                        if (PreferenceService.instance.shouldAlwaysShowBarcode())
+                          _getBarcodeRow(),
                       ],
                     ),
                   ),
@@ -384,6 +388,33 @@ class _CodeWidgetState extends State<CodeWidget> {
         widget.code.account,
       ].where((value) => value.isNotEmpty).join(', '),
       child: scaledContent,
+    );
+  }
+
+
+
+
+  Widget _getBarcodeRow() {
+    return ValueListenableBuilder<String>(
+      valueListenable: _currentCode,
+      builder: (context, value, child) {
+        if (value.isEmpty || _hideCode) {
+          return const SizedBox.shrink();
+        }
+        return Container(
+          padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 4),
+          child: BarcodeWidget(
+            barcode: Barcode.code128(),
+            data: value,
+            width: double.infinity,
+            height: 40,
+            drawText: false,
+            errorBuilder: (context, error) => Center(
+              child: Text(error),
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -635,6 +666,22 @@ class _CodeWidgetState extends State<CodeWidget> {
         label: l10n.qr,
         icon: Icons.qr_code_2_outlined,
         onSelected: () => _onShowQrPressed(null),
+      ),
+    );
+
+    entries.add(
+      MenuItem(
+        label: 'Barcode',
+        icon: Icons.view_column_outlined,
+        onSelected: () => _onShowBarcodePressed(null),
+      ),
+    );
+
+    entries.add(
+      MenuItem(
+        label: l10n.qrCode,
+        icon: Icons.qr_code_2_outlined,
+        onSelected: () => _onShowQrForCodeValuePressed(null),
       ),
     );
 
@@ -938,6 +985,62 @@ class _CodeWidgetState extends State<CodeWidget> {
     }
   }
 
+  Future<void> _onShowBarcodePressed([bool? pop]) async {
+    if (mounted && pop == true) {
+      Navigator.of(context).pop();
+    }
+
+    if (_hideCode) {
+      showToast(context, context.l10n.doubleTapToViewHiddenCode);
+      return;
+    }
+
+    final codeValue = _currentCode.value;
+    if (codeValue.isEmpty) {
+      return;
+    }
+
+    await showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AuthBarcodeDialog(
+          data: codeValue,
+          title: widget.code.issuer,
+          subtitle: widget.code.account,
+          dialogTitle: 'Barcode',
+        );
+      },
+    );
+  }
+
+  Future<void> _onShowQrForCodeValuePressed([bool? pop]) async {
+    if (mounted && pop == true) {
+      Navigator.of(context).pop();
+    }
+
+    if (_hideCode) {
+      showToast(context, context.l10n.doubleTapToViewHiddenCode);
+      return;
+    }
+
+    final codeValue = _currentCode.value;
+    if (codeValue.isEmpty) {
+      return;
+    }
+
+    await showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AuthQrDialog(
+          data: codeValue,
+          title: widget.code.issuer,
+          subtitle: widget.code.account,
+          dialogTitle: context.l10n.qrCode,
+        );
+      },
+    );
+  }
+
   Future<void> _onShowQrPressed([bool? pop]) async {
     if (mounted && pop == true) {
       Navigator.of(context).pop();
@@ -962,10 +1065,7 @@ class _CodeWidgetState extends State<CodeWidget> {
           data: qrData,
           title: widget.code.issuer,
           subtitle: widget.code.account,
-          shareFileName: 'ente_auth_qr_${widget.code.account}.png',
-          shareText: 'QR code for ${widget.code.account}',
           dialogTitle: context.l10n.qrCode,
-          shareButtonText: context.l10n.share,
         );
       },
     );

@@ -543,10 +543,7 @@ class _HomePageState extends State<HomePage> {
           data: qrData,
           title: code.issuer,
           subtitle: code.account,
-          shareFileName: 'ente_auth_qr_${code.account}.png',
-          shareText: 'QR code for ${code.account}',
           dialogTitle: context.l10n.qrCode,
-          shareButtonText: context.l10n.share,
         );
       },
     );
