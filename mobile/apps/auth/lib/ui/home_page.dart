@@ -543,7 +543,7 @@ class _HomePageState extends State<HomePage> {
           data: qrData,
           title: code.issuer,
           subtitle: code.account,
-          dialogTitle: context.l10n.qrCode,
+          dialogTitle: 'Transfer QR Code',
         );
       },
     );

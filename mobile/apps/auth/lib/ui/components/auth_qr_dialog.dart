@@ -19,7 +19,7 @@ class AuthQrDialog extends StatefulWidget {
     required this.data,
     required this.title,
     this.subtitle,
-    this.dialogTitle = 'QR Code',
+    this.dialogTitle = 'Transfer QR Code',
   });
 
   @override
@@ -103,7 +103,26 @@ class _AuthQrDialogState extends State<AuthQrDialog> {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ],
-                            SizedBox(height: qrSize * 0.07),
+                            const SizedBox(height: 10),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: accentColor.withValues(alpha: 0.15),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                'TRANSFER QR CODE',
+                                style: enteTextTheme.smallBold.copyWith(
+                                  color: accentColor,
+                                  fontSize: 10,
+                                  letterSpacing: 1.2,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: qrSize * 0.05),
                             QrImageView(
                               data: widget.data,
                               eyeStyle: const QrEyeStyle(

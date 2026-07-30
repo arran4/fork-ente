@@ -17,7 +17,7 @@ import 'package:ente_auth/store/code_store.dart';
 import 'package:ente_auth/theme/ente_theme.dart';
 import 'package:ente_auth/ui/code_timer_progress.dart';
 import 'package:ente_auth/ui/code_widget_layout_utils.dart';
-import 'package:ente_auth/ui/components/auth_barcode_dialog.dart';
+import 'package:ente_auth/ui/components/auth_code_tabbed_dialog.dart';
 import 'package:ente_auth/ui/components/auth_qr_dialog.dart';
 import 'package:ente_auth/ui/components/note_dialog.dart';
 import 'package:ente_auth/ui/home/shortcuts.dart';
@@ -663,14 +663,6 @@ class _CodeWidgetState extends State<CodeWidget> {
 
     entries.add(
       MenuItem(
-        label: l10n.qr,
-        icon: Icons.qr_code_2_outlined,
-        onSelected: () => _onShowQrPressed(null),
-      ),
-    );
-
-    entries.add(
-      MenuItem(
         label: 'Barcode',
         icon: Icons.view_column_outlined,
         onSelected: () => _onShowBarcodePressed(null),
@@ -679,7 +671,7 @@ class _CodeWidgetState extends State<CodeWidget> {
 
     entries.add(
       MenuItem(
-        label: l10n.qrCode,
+        label: 'Code QR',
         icon: Icons.qr_code_2_outlined,
         onSelected: () => _onShowQrForCodeValuePressed(null),
       ),
@@ -717,6 +709,14 @@ class _CodeWidgetState extends State<CodeWidget> {
         ),
       );
     }
+
+    entries.add(
+      MenuItem(
+        label: 'Transfer QR Code',
+        icon: Icons.qr_code_2_outlined,
+        onSelected: () => _onShowQrPressed(null),
+      ),
+    );
   }
 
   /// Adds edit menu item for non-trashed codes or restore for trashed codes.
@@ -995,19 +995,20 @@ class _CodeWidgetState extends State<CodeWidget> {
       return;
     }
 
-    final codeValue = _currentCode.value;
-    if (codeValue.isEmpty) {
+    if (_currentCode.value.isEmpty) {
       return;
     }
 
-    await showDialog(
+    await showBottomSheetComponent<void>(
       context: context,
-      builder: (BuildContext dialogContext) {
-        return AuthBarcodeDialog(
-          data: codeValue,
+      useRootNavigator: true,
+      builder: (_) {
+        return AuthCodeTabbedDialog(
+          codeNotifier: _currentCode,
           title: widget.code.issuer,
           subtitle: widget.code.account,
-          dialogTitle: 'Barcode',
+          initialTabIndex: 1,
+          dialogTitle: 'Verification Code',
         );
       },
     );
@@ -1023,19 +1024,20 @@ class _CodeWidgetState extends State<CodeWidget> {
       return;
     }
 
-    final codeValue = _currentCode.value;
-    if (codeValue.isEmpty) {
+    if (_currentCode.value.isEmpty) {
       return;
     }
 
-    await showDialog(
+    await showBottomSheetComponent<void>(
       context: context,
-      builder: (BuildContext dialogContext) {
-        return AuthQrDialog(
-          data: codeValue,
+      useRootNavigator: true,
+      builder: (_) {
+        return AuthCodeTabbedDialog(
+          codeNotifier: _currentCode,
           title: widget.code.issuer,
           subtitle: widget.code.account,
-          dialogTitle: context.l10n.qrCode,
+          initialTabIndex: 0,
+          dialogTitle: 'Verification Code',
         );
       },
     );
@@ -1065,7 +1067,7 @@ class _CodeWidgetState extends State<CodeWidget> {
           data: qrData,
           title: widget.code.issuer,
           subtitle: widget.code.account,
-          dialogTitle: context.l10n.qrCode,
+          dialogTitle: 'Transfer Account QR',
         );
       },
     );
