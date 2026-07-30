@@ -1,6 +1,5 @@
-import "package:ente_auth/app/app.dart";
-import "package:ente_auth/bootstrap.dart";
+import "package:ente_auth/main.dart" as entrypoint;
 
 void main() {
-  bootstrap(() => const App());
+  entrypoint.main();
 }

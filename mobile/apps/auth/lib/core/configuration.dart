@@ -90,7 +90,11 @@ class Configuration extends BaseConfiguration
   }
 
   bool hasOptedForOfflineMode() {
-    return _preferences.getBool(hasOptedForOfflineModeKey) ?? false;
+    try {
+      return _preferences.getBool(hasOptedForOfflineModeKey) ?? false;
+    } catch (_) {
+      return false;
+    }
   }
 
   Future<void> optForOfflineMode() async {
