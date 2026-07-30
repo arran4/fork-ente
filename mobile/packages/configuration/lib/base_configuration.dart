@@ -413,7 +413,11 @@ abstract class BaseConfiguration {
   }
 
   bool hasConfiguredAccount() {
-    return getToken() != null && _key != null;
+    try {
+      return getToken() != null && _key != null;
+    } catch (_) {
+      return false;
+    }
   }
 
   void setVolatilePassword(String volatilePassword) {

@@ -24,6 +24,7 @@ class PreferenceService {
   static const kShouldHideCodesKey = "should_hide_codes";
   static const kShouldAutoFocusOnSearchBar = "should_auto_focus_on_search_bar";
   static const kShouldMinimizeOnCopy = "should_minimize_on_copy";
+  static const kShouldAlwaysShowBarcode = "should_always_show_barcode";
   static const kShouldMinimizeToTrayOnClose =
       "should_minimize_to_tray_on_close";
   static const kCompactMode = "vi.compactMode";
@@ -67,6 +68,20 @@ class PreferenceService {
 
   Future<void> setShowLargeIcons(bool value) async {
     await _prefs.setBool(kShouldShowLargeIconsKey, value);
+    Bus.instance.fire(IconsChangedEvent());
+  }
+
+
+  bool shouldAlwaysShowBarcode() {
+    if (_prefs.containsKey(kShouldAlwaysShowBarcode)) {
+      return _prefs.getBool(kShouldAlwaysShowBarcode)!;
+    } else {
+      return false;
+    }
+  }
+
+  Future<void> setShouldAlwaysShowBarcode(bool value) async {
+    await _prefs.setBool(kShouldAlwaysShowBarcode, value);
     Bus.instance.fire(IconsChangedEvent());
   }
 

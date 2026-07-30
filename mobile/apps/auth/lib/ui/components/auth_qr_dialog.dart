@@ -1,37 +1,25 @@
-import 'dart:io';
 import 'dart:math';
-import 'dart:typed_data';
-import 'dart:ui' as ui;
 
 import 'package:ente_auth/l10n/l10n.dart';
 import 'package:ente_auth/theme/colors.dart';
 import 'package:ente_auth/theme/ente_theme.dart';
 import 'package:ente_components/ente_components.dart' hide textBaseLight;
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:share_plus/share_plus.dart';
 
 class AuthQrDialog extends StatefulWidget {
   final String data;
   final String title;
   final String? subtitle;
-  final String shareFileName;
-  final String shareText;
   final String dialogTitle;
-  final String shareButtonText;
 
   const AuthQrDialog({
     super.key,
     required this.data,
     required this.title,
-    required this.shareFileName,
-    required this.shareText,
     this.subtitle,
-    this.dialogTitle = 'QR Code',
-    this.shareButtonText = 'Share',
+    this.dialogTitle = 'Transfer QR Code',
   });
 
   @override
@@ -39,43 +27,6 @@ class AuthQrDialog extends StatefulWidget {
 }
 
 class _AuthQrDialogState extends State<AuthQrDialog> {
-  final GlobalKey _qrKey = GlobalKey();
-
-  Future<void> _shareQrCode() async {
-    try {
-      if (!mounted) return;
-      final boundary =
-          _qrKey.currentContext?.findRenderObject() as RenderRepaintBoundary?;
-      if (boundary == null) return;
-
-      final ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-      final ByteData? byteData = await image.toByteData(
-        format: ui.ImageByteFormat.png,
-      );
-      if (byteData == null) return;
-
-      final Uint8List pngBytes = byteData.buffer.asUint8List();
-      final directory = await getTemporaryDirectory();
-      final file = File('${directory.path}/${widget.shareFileName}');
-      await file.writeAsBytes(pngBytes);
-
-      if (!mounted) return;
-      final box = context.findRenderObject() as RenderBox?;
-      final shareOrigin = box != null
-          ? box.localToGlobal(Offset.zero) & box.size
-          : null;
-
-      await SharePlus.instance.share(
-        ShareParams(
-          files: [XFile(file.path)],
-          text: widget.shareText,
-          sharePositionOrigin: shareOrigin,
-        ),
-      );
-    } catch (error) {
-      debugPrint('Error sharing QR code: $error');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,9 +47,7 @@ class _AuthQrDialogState extends State<AuthQrDialog> {
             maxHeight: MediaQuery.sizeOf(context).height * 0.62,
           ),
           child: SingleChildScrollView(
-            child: RepaintBoundary(
-              key: _qrKey,
-              child: ClipRRect(
+            child: ClipRRect(
                 borderRadius: BorderRadius.circular(Radii.sheet),
                 child: Container(
                   width: double.infinity,
@@ -154,7 +103,26 @@ class _AuthQrDialogState extends State<AuthQrDialog> {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ],
-                            SizedBox(height: qrSize * 0.07),
+                            const SizedBox(height: 10),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: accentColor.withValues(alpha: 0.15),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                'TRANSFER QR CODE',
+                                style: enteTextTheme.smallBold.copyWith(
+                                  color: accentColor,
+                                  fontSize: 10,
+                                  letterSpacing: 1.2,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: qrSize * 0.05),
                             QrImageView(
                               data: widget.data,
                               eyeStyle: const QrEyeStyle(
@@ -190,10 +158,6 @@ class _AuthQrDialogState extends State<AuthQrDialog> {
             ),
           ),
         ),
-        actions: [
-          ButtonComponent(label: widget.shareButtonText, onTap: _shareQrCode),
-        ],
-      ),
-    );
+      );
   }
 }
