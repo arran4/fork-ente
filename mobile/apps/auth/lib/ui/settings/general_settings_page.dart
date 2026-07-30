@@ -54,6 +54,15 @@ class GeneralSettingsPage extends StatelessWidget {
               ),
             ),
             _toggleItem(
+              title: 'Always show barcode',
+              value: PreferenceService.instance.shouldAlwaysShowBarcode,
+              onChanged: () async {
+                await PreferenceService.instance.setShouldAlwaysShowBarcode(
+                  !PreferenceService.instance.shouldAlwaysShowBarcode(),
+                );
+              },
+            ),
+            _toggleItem(
               title: l10n.compactMode,
               value: PreferenceService.instance.isCompactMode,
               onChanged: () async {
